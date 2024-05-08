@@ -1,7 +1,5 @@
 mod display;
 
-use crate::Id;
-
 enum Team {
     Friend,
     Enemy,
@@ -9,7 +7,6 @@ enum Team {
 
 pub struct Unit {
     // 基础
-    id : Id,
     name : String,
     team : Team,
 
@@ -18,4 +15,19 @@ pub struct Unit {
     
     // 状态
     hp : i32,
+}
+
+impl Unit {
+    fn new(
+        name : String, 
+        is_friend : bool, 
+        hp_max : i32
+    ) -> Self {
+        Self {
+            name,
+            team : if is_friend { Team::Friend } else { Team::Enemy },
+            hp_max,
+            hp : hp_max,
+        }
+    }
 }
