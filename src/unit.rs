@@ -15,19 +15,23 @@ pub struct Unit {
     
     // 状态
     hp : i32,
+    stand : bool,
+    bound_arm : i32,
+    bound_leg : i32,
+    bound_lock : bool,
 }
 
-impl Unit {
-    fn new(
-        name : String, 
-        is_friend : bool, 
-        hp_max : i32
-    ) -> Self {
-        Self {
-            name,
-            team : if is_friend { Team::Friend } else { Team::Enemy },
-            hp_max,
-            hp : hp_max,
-        }
-    }
-}
+// impl Unit {
+//     fn new(
+//         name : String, 
+//         is_friend : bool, 
+//         hp_max : i32
+//     ) -> Self {
+//         Self {
+//             name,
+//             team : if is_friend { Team::Friend } else { Team::Enemy },
+//             hp_max,
+//             hp : hp_max,
+//         }
+//     }
+// }
