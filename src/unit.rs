@@ -1,10 +1,14 @@
 mod display;
 
+use miniserde::{Deserialize, Serialize};
+
+#[derive(Clone, Serialize, Deserialize)]
 enum Team {
     Friend,
     Enemy,
 }
 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Unit {
     // 基础
     name : String,
