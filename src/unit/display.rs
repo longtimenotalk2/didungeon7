@@ -8,7 +8,7 @@ use super::{Team, Unit};
 impl Display for Unit {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut s = String::new();
-        // 姿态
+        // pose
         s += if self.stand {
             "!"
         } else {
@@ -25,7 +25,7 @@ impl Display for Unit {
         } else {
             " "
         };
-        // 名字
+        // name
         let color_name = if self.bound_lock {
             None
         } else {
@@ -51,25 +51,25 @@ impl Display for Unit {
         }
         s += &name;
         s += " ";
-        // 束缚情况
+        // boundage
         s += & if self.bound_lock {
-            "锁 ".to_string()
+            "lock".to_string()
         } else {
             if self.bound_arm > 0 {
                 if self.bound_leg > 0 {
-                    format!("{}+{}", self.bound_arm, self.bound_leg)
+                    format!("{}+{} ", self.bound_arm, self.bound_leg)
                 } else {
-                    format!("臂{}", self.bound_arm)
+                    format!("arm{}", self.bound_arm)
                 }
             } else {
                 if self.bound_leg > 0 {
-                    format!("腿{}", self.bound_leg)
+                    format!("leg{}", self.bound_leg)
                 } else {
                     "   ".to_string()
                 }
             }
         };
-        // 血条
+        // hp
         s += &hp_bar::<20, 50>(self.hp, self.hp_max);
 
         write!(f, "{}", s)
@@ -82,7 +82,7 @@ mod test {
     #[test]
     fn test_unit() {
         let my_unit = Unit {
-            name: "艾莉莎".to_string(),
+            name: "alyssa".to_string(),
             team: Team::Friend,
             hp_max: 500,
             hp: 80,
@@ -94,10 +94,6 @@ mod test {
         println!("{}", my_unit);
     }
 
-    #[test]
-    fn test_delete_line() {
-        println!("{}", delete_line(&"流萤".color(Color::Green).to_string()))
-    }
 
     #[test]
     fn test() {
