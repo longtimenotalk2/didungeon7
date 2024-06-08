@@ -16,7 +16,14 @@ mod test {
         let mut board = Board::new();
         let unit_data = UnitData::new("艾丽莎");
         board.add_unit(unit_data);
-        let unit = board.get_unit(0);
-        unit.show();
+        let id_a = 0;
+
+        macro_rules! unit_a {
+            () => {
+                board.get_unit(id_a)
+            };
+        }
+
+        unit_a!().show();
     }
 }
