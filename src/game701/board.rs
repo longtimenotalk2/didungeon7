@@ -19,11 +19,11 @@ impl Board {
         self.units.push(unit_data);
     }
 
-    pub fn get_unit(&self, id: Id) -> Unit {
+    pub fn unit(&self, id: Id) -> Unit {
         Unit::create(&self, id)
     }
 
-    fn get_unit_data_with_id(&self, id : Id) -> &UnitData {
+    fn unit_data_with_id(&self, id : Id) -> &UnitData {
         &self.units[id]
     }
 }

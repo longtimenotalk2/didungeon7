@@ -1,7 +1,7 @@
 use super::Unit;
 
 impl<'a> Unit<'a> {
-    pub fn get_name(&self) -> &str {
+    pub fn name(&self) -> &str {
         &self.unit_data().name
     }
 }

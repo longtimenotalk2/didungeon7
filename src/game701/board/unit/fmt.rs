@@ -3,7 +3,7 @@ use super::Unit;
 impl<'a> Unit<'a> {
     pub fn show(&self) {
         // name
-        print!("{}", self.get_name());
+        print!("{}", self.name());
     }
 }
 
@@ -20,7 +20,7 @@ mod test {
 
         macro_rules! unit_a {
             () => {
-                board.get_unit(id_a)
+                board.unit(id_a)
             };
         }
 

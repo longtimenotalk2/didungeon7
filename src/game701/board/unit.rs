@@ -23,6 +23,6 @@ impl<'a> Unit<'a> {
     }
 
     fn unit_data(&self) -> &UnitData {
-        self.board.get_unit_data_with_id(self.id)
+        self.board.unit_data_with_id(self.id)
     }
 }
