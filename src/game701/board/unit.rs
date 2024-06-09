@@ -8,6 +8,15 @@ mod fmt;
 
 pub struct UnitData {
     name : String,
+
+    // attribute
+    max_hp : i32,
+    basic_melee_atk : i32,
+    basic_melee_def : i32,
+    basic_spd : i32,
+
+    // state
+    hp : i32,
 }
 pub struct Unit<'a> {
     board : &'a Board,
