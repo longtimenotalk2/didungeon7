@@ -1,0 +1,59 @@
+use super::{Team, UnitData};
+
+impl UnitData {
+    pub fn new_noal() -> Self {
+        Self::new(
+            "诺艾尔",
+            Team::Ally,
+            320, // max_hp,
+            80, // basic_melee_atk
+            90, // basic_melee_def
+            101, // basic_spd
+            5, // rope_tie
+            2, // rope_struggle
+            4, // rope_rescue
+        )
+    }
+
+    pub fn new_yelin() -> Self {
+        Self::new(
+            "叶  琳",
+            Team::Ally,
+            500, // max_hp,
+            130, // basic_melee_atk
+            137, // basic_melee_def
+            103, // basic_spd
+            3, // rope_tie
+            1, // rope_struggle
+            2, // rope_rescue
+        )
+    }
+
+    pub fn new_alyssa() -> Self {
+        Self::new(
+            "艾丽莎",
+            Team::Ally,
+            380, // max_hp,
+            92, // basic_melee_atk
+            95, // basic_melee_def
+            124, // basic_spd
+            4, // rope_tie
+            2, // rope_struggle
+            3, // rope_rescue
+        )
+    }
+
+    pub fn new_elis() -> Self {
+        Self::new(
+            "伊莉丝",
+            Team::Ally,
+            420, // max_hp,
+            105, // basic_melee_atk
+            110, // basic_melee_def
+            112, // basic_spd
+            4, // rope_tie
+            2, // rope_struggle
+            3, // rope_rescue
+        )
+    }
+}

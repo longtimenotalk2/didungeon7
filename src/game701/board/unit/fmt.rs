@@ -1,11 +1,17 @@
 use colorful::{Color, Colorful};
 
+use crate::game701::board::unit::Team;
+
 use super::Unit;
 
 impl<'a> Unit<'a> {
     pub fn show(&self) {
         // name
-        print!("{}", self.name());
+        let name_color = match self.team() {
+            Team::Ally => Color::Blue,
+            Team::Enemy => Color::Red,
+        };
+        print!("{}", self.name().color(name_color));
 
         // hp bar
         print!("{}", hp_bar::<20, 50>(self.hp(), self.max_hp()));
@@ -23,7 +29,7 @@ mod test {
     #[test]
     fn test_show() {
         let mut board = Board::new();
-        let unit_data = UnitData::new_default();
+        let unit_data = UnitData::new_noal();
         board.add_unit(unit_data);
         let id_a = 0;
 
