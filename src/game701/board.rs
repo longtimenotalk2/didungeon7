@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
-use colorful::core::StrMarker;
-use unit::{Unit, UnitData};
+use unit::{Unit, UnitData, UnitMut};
 
-use super::common::Id;
+use super::common::{Id, Pos};
 
 pub mod unit;
+pub mod new;
 
 mod operate;
 mod fmt;
@@ -46,7 +46,20 @@ impl Board {
         Unit::create(&self, id)
     }
 
+    pub fn unit_mut(&mut self, id: Id) -> UnitMut {
+        UnitMut::create(self, id)
+    }
+
     fn unit_data_with_id(&self, id : Id) -> &UnitData {
         &self.units[id]
+    }
+
+    fn get_pos(&self, id : Id) -> Pos {
+        for (p, i) in self.ids_by_position.iter().enumerate() {
+            if *i == id {
+                return p as i32;
+            }
+        }
+        unimplemented!()
     }
 }

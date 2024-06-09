@@ -7,6 +7,7 @@ mod new;
 mod fmt;
 mod characters;
 mod enemys;
+mod action;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Team {
@@ -47,5 +48,23 @@ impl<'a> Unit<'a> {
 
     fn unit_data(&self) -> &UnitData {
         self.board.unit_data_with_id(self.id)
+    }
+}
+
+pub struct UnitMut<'a> {
+    board : &'a mut Board,
+    id : Id,
+}
+
+impl<'a> UnitMut<'a> {
+    pub fn create(board : &'a mut Board, id : Id) -> UnitMut<'a> {
+        Self {
+            board,
+            id,
+        }
+    }
+
+    fn immute_core(&self) -> Unit {
+        Unit::create(&self.board, self.id)
     }
 }
