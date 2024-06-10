@@ -16,6 +16,7 @@ pub enum Team {
     Enemy,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Pose {
     Alert,
     Left,

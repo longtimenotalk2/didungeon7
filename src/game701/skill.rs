@@ -22,10 +22,16 @@ impl SkillData {
         }
     }
 
-    // fn get_target(&self, unit : &Unit) -> Vec<Target> {
-    //     match self {
-    //         Self::Melee => vec![Target::Unit(unit.id)],
-    //         Self::Skip => vec![Target::Unit(unit.id())],
-    //     }
-    // }
+    fn get_target(&self, unit : &Unit) -> Vec<Target> {
+        fn ids_fmt(l : Vec<Id>) -> Vec<Target> {
+            l.iter().map(|id| Target::Unit(*id)).collect()
+        }
+
+        let to_self = || {vec![Target::Unit(unit.id())]};
+
+        match self {
+            Self::Melee => ids_fmt(unit.scan_touch_stand_enemy(1)),
+            Self::Skip => to_self(),
+        }
+    }
 }

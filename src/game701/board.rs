@@ -84,4 +84,10 @@ impl Board {
         }
         unimplemented!()
     }
+
+    fn get_id_from_pos(&self, pos: Pos) -> Id {
+        let p : usize = pos.try_into().unwrap();
+        self.ids_by_position[p]
+    }
+
 }

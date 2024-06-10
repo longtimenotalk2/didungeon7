@@ -1,6 +1,6 @@
-use crate::game701::common::Id;
+use crate::game701::common::{Id, Pos};
 
-use super::{Team, Unit};
+use super::{Pose, Team, Unit};
 
 impl<'a> Unit<'a> {
     // basic
@@ -20,6 +20,10 @@ impl<'a> Unit<'a> {
 
     pub fn id(&self) -> Id {
         self.id
+    }
+
+    pub fn pos(&self) -> Pos {
+        self.board.get_pos(self.id)
     }
 
     pub fn team(&self) -> Team {
@@ -52,7 +56,16 @@ impl<'a> Unit<'a> {
         self.unit_data().is_active
     }
 
+    pub fn is_stand(&self) -> bool {
+        self.unit_data().pose != Pose::Fall
+    }
+
     pub fn arm_can_use(&self) -> bool {
         self.unit_data().bound_upper == 0
+    }
+
+    // interaction
+    pub fn can_block(&self) -> bool {
+        self.is_stand()
     }
 }
