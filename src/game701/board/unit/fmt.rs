@@ -26,6 +26,8 @@ impl<'a> Unit<'a> {
         // hp state
         print!("{:>2}/{:>2}", self.hp(), self.max_hp());
 
+        // spd
+        print!(", {:>2}", self.spd());
     }
 }
 

@@ -1,3 +1,5 @@
+use crate::game701::common::Id;
+
 use super::{Team, Unit};
 
 impl<'a> Unit<'a> {
@@ -14,6 +16,10 @@ impl<'a> Unit<'a> {
             name += self.board.name_adder[self.id];
         }
         name
+    }
+
+    pub fn id(&self) -> Id {
+        self.id
     }
 
     pub fn team(&self) -> Team {
@@ -44,5 +50,9 @@ impl<'a> Unit<'a> {
     // state
     pub fn is_active(&self) -> bool {
         self.unit_data().is_active
+    }
+
+    pub fn arm_can_use(&self) -> bool {
+        self.unit_data().bound_upper == 0
     }
 }

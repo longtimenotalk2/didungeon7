@@ -8,11 +8,20 @@ mod fmt;
 mod characters;
 mod enemys;
 mod action;
+mod scan;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Team {
     Ally,
     Enemy,
+}
+
+enum Pose {
+    Alert,
+    Left,
+    Right,
+    Confuse,
+    Fall,
 }
 
 pub struct UnitData {
@@ -30,6 +39,7 @@ pub struct UnitData {
 
     // state
     is_active : bool,
+    pose : Pose,
     hp : i32,
     bound_upper : i32,
     bound_lower : i32,

@@ -1,4 +1,4 @@
-use super::{Team, UnitData};
+use super::{Pose, Team, UnitData};
 
 impl UnitData {
     pub fn new(
@@ -23,6 +23,7 @@ impl UnitData {
             rope_struggle,
             rope_rescue,
             is_active : false,
+            pose : Pose::Alert,
             hp : max_hp,
             bound_upper : 0,
             bound_lower : 0,

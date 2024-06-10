@@ -8,6 +8,10 @@ impl<'a> UnitMut<'a> {
         self.board.unit_data_mut(self.id).is_active = true;
     }
 
+    pub fn end_active(&mut self) {
+        self.board.unit_data_mut(self.id).is_active = false;
+    }
+
     // act
     pub fn dash_to_unit(&mut self, id : Id) {
         let pos_self = self.board.get_pos(self.id);
