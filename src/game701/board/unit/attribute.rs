@@ -1,4 +1,4 @@
-use crate::game701::common::{Id, Pos};
+use crate::game701::{common::{Id, Pos}, skill::Skill};
 
 use super::{Pose, Team, Unit};
 
@@ -49,6 +49,10 @@ impl<'a> Unit<'a> {
 
     pub fn order_point(&self) -> i32 {
         self.spd() * 10 + self.id as i32
+    }
+
+    pub fn skills(&self) -> Vec<Skill> {
+        Skill::basic_set()
     }
 
     // state

@@ -1,8 +1,10 @@
 use rand::Rng;
 
-use crate::game701::common::Id;
+use crate::game701::{common::Id, skill::Target};
 
 use super::Board;
+
+pub mod io;
 
 impl Board{
     pub fn round_start(&mut self) {
@@ -42,6 +44,35 @@ impl Board{
     }
 
     pub fn turn(&mut self, id : Id) {
+        macro_rules! unit {
+            () => {
+                self.unit(id)
+            };
+        }
+        // skill_options
+        let mut skill_options = vec![];
+        let mut skills = vec![];
+        for skill in unit!().skills() {
+            if skill.can_use(&unit!()) {
+                let targets = skill.find_targets(&unit!());
+                if targets.len() > 0 {
+                    skill_options.push(skill.name().to_string());
+                    skills.push(skill);
+                }
+            }
+        }
+
+        assert!(skills.len() > 0); // has skip
+
+        let select_i = io::io_select_from_list(skill_options);
+        let skill = skills[select_i].clone();
+
+        // target_options
+        let targets = skill.find_targets(&unit!());
+        let target_options = targets.iter().map(|t| t.name_in_board(&self)).collect();
+
+        let select_i = io::io_select_from_list(target_options);
+        let target = targets[select_i].clone();
 
     }
 }
