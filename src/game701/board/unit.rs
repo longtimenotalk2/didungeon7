@@ -2,7 +2,7 @@ use super::super::common::Id;
 
 use super::Board;
 
-mod basic;
+mod attribute;
 mod new;
 mod fmt;
 mod characters;
@@ -29,6 +29,7 @@ pub struct UnitData {
     rope_rescue : i32,
 
     // state
+    is_active : bool,
     hp : i32,
     bound_upper : i32,
     bound_lower : i32,
@@ -47,7 +48,7 @@ impl<'a> Unit<'a> {
     }
 
     fn unit_data(&self) -> &UnitData {
-        self.board.unit_data_with_id(self.id)
+        self.board.unit_data(self.id)
     }
 }
 

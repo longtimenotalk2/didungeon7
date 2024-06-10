@@ -5,10 +5,10 @@ impl UnitData {
         Self::new(
             "诺艾尔",
             Team::Ally,
-            320, // max_hp,
-            80, // basic_melee_atk
-            90, // basic_melee_def
-            101, // basic_spd
+            32, // max_hp,
+            8, // basic_melee_atk
+            9, // basic_melee_def
+            10, // basic_spd
             5, // rope_tie
             2, // rope_struggle
             4, // rope_rescue
@@ -19,10 +19,10 @@ impl UnitData {
         Self::new(
             "叶  琳",
             Team::Ally,
-            500, // max_hp,
-            130, // basic_melee_atk
-            137, // basic_melee_def
-            103, // basic_spd
+            50, // max_hp,
+            13, // basic_melee_atk
+            13, // basic_melee_def
+            11, // basic_spd
             3, // rope_tie
             1, // rope_struggle
             2, // rope_rescue
@@ -33,10 +33,10 @@ impl UnitData {
         Self::new(
             "艾丽莎",
             Team::Ally,
-            380, // max_hp,
-            92, // basic_melee_atk
-            95, // basic_melee_def
-            124, // basic_spd
+            38, // max_hp,
+            9, // basic_melee_atk
+            9, // basic_melee_def
+            16, // basic_spd
             4, // rope_tie
             2, // rope_struggle
             3, // rope_rescue
@@ -47,10 +47,10 @@ impl UnitData {
         Self::new(
             "伊莉丝",
             Team::Ally,
-            420, // max_hp,
-            105, // basic_melee_atk
-            110, // basic_melee_def
-            112, // basic_spd
+            42, // max_hp,
+            10, // basic_melee_atk
+            11, // basic_melee_def
+            13, // basic_spd
             4, // rope_tie
             2, // rope_struggle
             3, // rope_rescue

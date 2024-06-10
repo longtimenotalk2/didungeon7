@@ -5,10 +5,10 @@ impl UnitData {
         Self::new(
             "女战士",
             Team::Enemy,
-            500, // max_hp,
-            100, // basic_melee_atk
-            100, // basic_melee_def
-            100, // basic_spd
+            50, // max_hp,
+            10, // basic_melee_atk
+            10, // basic_melee_def
+            10, // basic_spd
             3, // rope_tie
             1, // rope_struggle
             2, // rope_rescue
@@ -19,10 +19,10 @@ impl UnitData {
         Self::new(
             "女盗贼",
             Team::Enemy,
-            400, // max_hp,
-            85, // basic_melee_atk
-            90, // basic_melee_def
-            110, // basic_spd
+            40, // max_hp,
+            8, // basic_melee_atk
+            9, // basic_melee_def
+            13, // basic_spd
             4, // rope_tie
             1, // rope_struggle
             3, // rope_rescue

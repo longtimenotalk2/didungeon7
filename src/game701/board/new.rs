@@ -2,7 +2,7 @@ use super::{unit::UnitData, Board};
 
 impl Board {
     pub fn new_team() -> Self {
-        let mut board = Board::new();
+        let mut board = Board::new(114514);
         board.add_unit(UnitData::new_noal());
         board.add_unit(UnitData::new_elis());
         board.add_unit(UnitData::new_alyssa());

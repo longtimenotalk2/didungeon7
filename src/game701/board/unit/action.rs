@@ -3,6 +3,12 @@ use crate::game701::common::Id;
 use super::UnitMut;
 
 impl<'a> UnitMut<'a> {
+    // in round
+    pub fn refresh_active(&mut self) {
+        self.board.unit_data_mut(self.id).is_active = true;
+    }
+
+    // act
     pub fn dash_to_unit(&mut self, id : Id) {
         let pos_self = self.board.get_pos(self.id);
         let pos = self.board.get_pos(id);
@@ -11,7 +17,6 @@ impl<'a> UnitMut<'a> {
         } else if pos_self > pos {
             self.board.unit_move(self.id, pos+1);
         }
-        
     }
 }
 

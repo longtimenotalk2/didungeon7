@@ -6,6 +6,13 @@ use super::Unit;
 
 impl<'a> Unit<'a> {
     pub fn show(&self) {
+        // active state
+        if self.is_active() {
+            print!("|");
+        } else {
+            print!(" ");
+        }
+        
         // name
         let name_color = match self.team() {
             Team::Ally => Color::Blue,
@@ -17,7 +24,7 @@ impl<'a> Unit<'a> {
         print!("{}", hp_bar::<20, 50>(self.hp(), self.max_hp()));
 
         // hp state
-        print!("{:>3}/{:>3}", self.hp(), self.max_hp());
+        print!("{:>2}/{:>2}", self.hp(), self.max_hp());
 
     }
 }
@@ -28,7 +35,7 @@ mod test {
 
     #[test]
     fn test_show() {
-        let mut board = Board::new();
+        let mut board = Board::new(114514);
         let unit_data = UnitData::new_noal();
         board.add_unit(unit_data);
         let id_a = 0;

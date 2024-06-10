@@ -22,6 +22,7 @@ impl UnitData {
             rope_tie,
             rope_struggle,
             rope_rescue,
+            is_active : false,
             hp : max_hp,
             bound_upper : 0,
             bound_lower : 0,
