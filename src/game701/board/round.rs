@@ -7,8 +7,18 @@ use super::Board;
 pub mod io;
 
 impl Board{
-    pub fn round_start(&mut self) {
+    pub fn play(&mut self) {
+        for _ in 0..100 {
+            let has_active_unit = self.round_main();
+            if !has_active_unit {
+                self.round_next();
+            }
+        }
+    }
+
+    fn round_next(&mut self) {
         self.round += 1;
+        println!("================第{:2}轮================", self.round);
         // active everyone
         for id in 0..self.len() {
             self.unit_mut(id).refresh_active()
@@ -54,6 +64,7 @@ impl Board{
                 self.unit_mut(id)
             };
         }
+        self.show();
         // skill_options
         let mut skill_options = vec![];
         let mut skills = vec![];

@@ -10,6 +10,9 @@ pub fn io_select_from_list(options : Vec<String>) -> usize {
     loop {
         let mut ops = String::new();
         io::stdin().read_line(&mut ops).expect("failed to read line");
+        if ops.trim() == "" {
+            ops = "0".to_string();
+        }
         if let Ok(op) = ops.trim().parse::<usize>() {
             if op < len {
                 return op
