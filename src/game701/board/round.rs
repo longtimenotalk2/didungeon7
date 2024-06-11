@@ -18,7 +18,7 @@ impl Board{
 
     fn round_next(&mut self) {
         self.round += 1;
-        println!("================第{:2}轮================", self.round);
+        println!("================第 {} 轮================", self.round);
         // active everyone
         for id in 0..self.len() {
             self.unit_mut(id).refresh_active()
@@ -71,6 +71,8 @@ impl Board{
         for skill in unit!().skills() {
             if skill.can_use(unit!()) {
                 let targets = skill.find_targets(unit!());
+                dbg!(&skill);
+                dbg!(&targets);
                 if targets.len() > 0 {
                     skill_options.push(skill.name().to_string());
                     skills.push(skill);

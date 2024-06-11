@@ -2,7 +2,7 @@ use super::{board::{unit::{Unit, UnitMut}, Board}, common::Id};
 
 mod combat;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Skill {
     Melee,
     Skip,
@@ -45,7 +45,7 @@ enum SkillData {
     Skip,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Target {
     Unit(Id),
 }
