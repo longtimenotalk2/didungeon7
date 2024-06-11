@@ -49,6 +49,11 @@ impl Board{
                 self.unit(id)
             };
         }
+        macro_rules! unit_mut {
+            () => {
+                self.unit_mut(id)
+            };
+        }
         // skill_options
         let mut skill_options = vec![];
         let mut skills = vec![];
@@ -73,6 +78,9 @@ impl Board{
 
         let select_i = io::io_select_from_list(target_options);
         let target = targets[select_i].clone();
+
+        // exe
+        skill.exe(&mut unit_mut!(), target)
 
     }
 }

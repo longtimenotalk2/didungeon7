@@ -34,6 +34,10 @@ impl Skill {
     pub fn find_targets(&self, unit : &Unit) -> Vec<Target> {
         self.link().find_targets(unit)
     }
+
+    pub fn exe(&self, unit : &mut UnitMut, target : Target) {
+        self.link().exe(unit, target)
+    }
 }
 
 enum SkillData {

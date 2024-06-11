@@ -22,6 +22,13 @@ impl<'a> UnitMut<'a> {
             self.board.unit_move(self.id, pos+1);
         }
     }
+
+    pub fn take_dmg(&mut self, dmg : i32) {
+        self.board.unit_data_mut(self.id).hp -= dmg;
+        if self.board.unit_data(self.id).hp <= 0 {
+            self.board.unit_data_mut(self.id).hp = 0;
+        }
+    }
 }
 
 #[cfg(test)]

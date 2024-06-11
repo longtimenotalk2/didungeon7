@@ -12,9 +12,15 @@ impl<'a> UnitMut<'a> {
                 self.other(id)
             };
         }
+        macro_rules! tar_mut {
+            () => {
+                self.other_mut(id)
+            };
+        }
         let atk = self.immute_core().melee_atk();
         let def = tar!().melee_def();
-        
+        let dmg = dmg_basic(atk, def) as i32;
+        tar_mut!().take_dmg(dmg);
     }
 }
 
