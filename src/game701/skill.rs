@@ -27,15 +27,15 @@ impl Skill {
         }
     }
 
-    pub fn can_use(&self, unit : &Unit) -> bool {
+    pub fn can_use(&self, unit : Unit) -> bool {
         self.link().can_use(unit)
     }
 
-    pub fn find_targets(&self, unit : &Unit) -> Vec<Target> {
+    pub fn find_targets(&self, unit : Unit) -> Vec<Target> {
         self.link().find_targets(unit)
     }
 
-    pub fn exe(&self, unit : &mut UnitMut, target : Target) {
+    pub fn exe(&self, unit : UnitMut, target : Target) {
         self.link().exe(unit, target)
     }
 }
@@ -66,14 +66,14 @@ impl Target {
 }
 
 impl SkillData {
-    fn can_use(&self, unit : &Unit) -> bool {
+    fn can_use(&self, unit : Unit) -> bool {
         match self {
             Self::Melee => unit.arm_can_use(),
             Self::Skip => true,
         }
     }
 
-    fn find_targets(&self, unit : &Unit) -> Vec<Target> {
+    fn find_targets(&self, unit : Unit) -> Vec<Target> {
         fn ids_fmt(l : Vec<Id>) -> Vec<Target> {
             l.iter().map(|id| Target::Unit(*id)).collect()
         }
@@ -86,7 +86,7 @@ impl SkillData {
         }
     }
 
-    fn exe(&self, unit : &mut UnitMut, target : Target) {
+    fn exe(&self, mut unit : UnitMut, target : Target) {
         match self {
             Self::Melee => unit.combat_touch(target.assert_unit()),
             Self::Skip => (),
