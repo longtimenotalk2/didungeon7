@@ -1,3 +1,5 @@
+use rand::Rng;
+
 use super::super::common::Id;
 
 use super::Board;
@@ -76,7 +78,19 @@ impl<'a> UnitMut<'a> {
         }
     }
 
-    fn immute_core(&self) -> Unit {
+    pub fn immute_core(&self) -> Unit {
         Unit::create(&self.board, self.id)
+    }
+
+    pub fn other(&self, id : Id) -> Unit {
+        Unit::create(&self.board, id)
+    }
+
+    pub fn other_mut(&mut self, id : Id) -> UnitMut {
+        UnitMut::create(self.board, id)
+    }
+
+    pub fn d100(&mut self) -> i32 {
+        self.board.rng.gen_range(1..=100)
     }
 }

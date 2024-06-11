@@ -1,4 +1,6 @@
-use super::{board::{unit::Unit, Board}, common::Id};
+use super::{board::{unit::{Unit, UnitMut}, Board}, common::Id};
+
+mod combat;
 
 #[derive(Clone)]
 pub enum Skill {
@@ -50,6 +52,13 @@ impl Target {
             Self::Unit(id) => board.unit(*id).name().to_string(),
         }
     }
+
+    pub fn assert_unit(&self) -> Id {
+        match self {
+            Self::Unit(id) => *id,
+            _ => unreachable!(),
+        }
+    }
 }
 
 impl SkillData {
@@ -70,6 +79,13 @@ impl SkillData {
         match self {
             Self::Melee => ids_fmt(unit.scan_touch_stand_enemy(1)),
             Self::Skip => to_self(),
+        }
+    }
+
+    fn exe(&self, unit : &mut UnitMut, target : Target) {
+        match self {
+            Self::Melee => unit.combat_touch(target.assert_unit()),
+            Self::Skip => (),
         }
     }
 }

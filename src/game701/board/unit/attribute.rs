@@ -39,6 +39,14 @@ impl<'a> Unit<'a> {
         self.unit_data().hp
     }
 
+    pub fn melee_atk(&self) -> i32 {
+        self.unit_data().basic_melee_atk
+    }
+
+    pub fn melee_def(&self) -> i32 {
+        self.unit_data().basic_melee_def
+    }
+
     pub fn spd_original(&self) -> i32 {
         self.unit_data().basic_spd
     }
