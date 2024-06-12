@@ -1,6 +1,6 @@
 use crate::game701::common::Id;
 
-use super::UnitMut;
+use super::{Pose, UnitMut};
 
 impl<'a> UnitMut<'a> {
     // in round
@@ -23,11 +23,34 @@ impl<'a> UnitMut<'a> {
         }
     }
 
+    // be act
+
     pub fn take_dmg(&mut self, dmg : i32) {
         self.board.unit_data_mut(self.id).hp -= dmg;
         if self.board.unit_data(self.id).hp <= 0 {
             self.board.unit_data_mut(self.id).hp = 0;
         }
+    }
+
+    pub fn take_tie(&mut self, rope : i32) {
+        macro_rules! unit_mut {
+            () => {
+                self.board.unit_data_mut(self.id)
+            };
+        }
+        unit_mut!().pose = Pose::Fall;
+
+        unit_mut!().bound_upper += rope;
+        let overflow = if unit_mut!().bound_upper > 4 {
+            unit_mut!().bound_upper - 4
+        } else {0};
+        unit_mut!().bound_upper -= overflow;
+
+        unit_mut!().bound_lower += overflow;
+        let overflow = if unit_mut!().bound_lower > 4 {
+            unit_mut!().bound_lower - 4
+        } else {0};
+        unit_mut!().bound_lower -= overflow;
     }
 }
 

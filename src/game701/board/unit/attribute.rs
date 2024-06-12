@@ -65,6 +65,10 @@ impl<'a> Unit<'a> {
         self.spd_original() + self.board.spd_fixs[self.id]
     }
 
+    pub fn rope_tie(&self) -> i32 {
+        self.unit_data().rope_tie
+    }
+
     pub fn order_point(&self) -> i32 {
         self.spd() * 10 + self.id as i32
     }
@@ -82,8 +86,20 @@ impl<'a> Unit<'a> {
         self.unit_data().pose != Pose::Fall
     }
 
+    pub fn bound_upper(&self) -> i32 {
+        self.unit_data().bound_upper
+    }
+
+    pub fn bound_lower(&self) -> i32 {
+        self.unit_data().bound_lower
+    }
+
     pub fn arm_can_use(&self) -> bool {
         self.unit_data().bound_upper == 0
+    }
+
+    pub fn is_weak(&self) -> bool {
+        self.hp() as f64 / self.max_hp() as f64 <= 0.2
     }
 
     // interaction

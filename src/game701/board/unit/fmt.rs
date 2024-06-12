@@ -7,27 +7,35 @@ use super::Unit;
 impl<'a> Unit<'a> {
     pub fn show(&self) {
         // active state
-        let dft = || {
-            if self.is_active() {
-                print!("|");
-            } else {
-                print!(" ");
-            }
-        };
 
-        if let Some(id) = self.board.id_now {
-            if id == self.id {
+        match self.board.id_now {
+            Some(id) if id == self.id => {
                 print!(">");
-            }else{
-                dft();
             }
-        }else{
-            dft();
+            _ => {
+                if self.is_active() {
+                    print!("|");
+                } else {
+                    print!(" ");
+                }
+            },
         }
-        
         
         // name
         print!("{}", self.colored_name());
+
+        // rope
+        if self.bound_upper() > 0 {
+            print!("臂{}", self.bound_upper());
+        } else {
+            print!("   ");
+        }
+
+        if self.bound_lower() > 0 {
+            print!("腿{}", self.bound_lower());
+        } else {
+            print!("   ");
+        }
 
         // hp bar
         print!("{}", hp_bar::<20, 50>(self.hp(), self.max_hp()));
@@ -49,15 +57,18 @@ mod test {
         let mut board = Board::new(114514);
         let unit_data = UnitData::new_noal();
         board.add_unit(unit_data);
-        let id_a = 0;
 
-        macro_rules! unit_a {
+        let mut unit_mut = board.unit_mut(0);
+
+        unit_mut.take_tie(9);
+
+        macro_rules! unit {
             () => {
-                board.unit(id_a)
+                board.unit(0)
             };
         }
 
-        unit_a!().show();
+        unit!().show();
     }
 }
 

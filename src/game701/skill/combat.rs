@@ -2,8 +2,8 @@ use crate::game701::{board::unit::UnitMut, common::Id};
 
 impl<'a> UnitMut<'a> {
     pub fn combat_touch(&mut self, id : Id) {
-        self.cause_dmg(id);
         self.dash_to_unit(id);
+        self.cause_dmg(id);
     }
 
     fn cause_dmg(&mut self, id : Id) {

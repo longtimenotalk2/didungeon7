@@ -21,6 +21,23 @@ impl<'a> Unit<'a> {
         targets.sort();
         targets
     }
+
+    pub fn scan_touch_weak_or_fall_enemy(&self, bypass : i32) -> Vec<Id> {
+        let mut targets = vec![];
+        let team = self.team();
+        for (id_tar, scan) in self.scan() {
+            let tar = self.board.unit(id_tar);
+            if 
+                tar.team() != team // enemy
+                && (tar.is_weak() || !tar.is_stand()) // weak or fall
+                && scan.block_num <= bypass // bypass limit
+            {
+                targets.push(id_tar);
+            }
+        }
+        targets.sort();
+        targets
+    }
 }
 
 #[cfg(test)]

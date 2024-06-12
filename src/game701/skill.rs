@@ -1,10 +1,12 @@
 use super::{board::{unit::{Unit, UnitMut}, Board}, common::Id};
 
 mod combat;
+mod rope;
 
 #[derive(Clone, Debug)]
 pub enum Skill {
     Melee,
+    Tie,
     Skip,
 }
 
@@ -12,17 +14,23 @@ impl Skill {
     pub fn name(&self) -> &'static str {
         match self {
             Self::Melee => "体术",
+            Self::Tie => "束缚",
             Self::Skip => "略过",
         }
     }
 
     pub fn basic_set() -> Vec<Self> {
-        vec![Self::Melee, Self::Skip]
+        vec![
+            Self::Melee, 
+            Self::Tie,
+            Self::Skip,
+        ]
     }
 
     fn link(&self) -> SkillData {
         match self {
             Self::Melee => SkillData::Melee,
+            Self::Tie => SkillData::Tie,
             Self::Skip => SkillData::Skip,
         }
     }
@@ -42,6 +50,7 @@ impl Skill {
 
 enum SkillData {
     Melee,
+    Tie,
     Skip,
 }
 
@@ -68,7 +77,8 @@ impl Target {
 impl SkillData {
     fn can_use(&self, unit : Unit) -> bool {
         match self {
-            Self::Melee => unit.arm_can_use(),
+            Self::Melee => unit.arm_can_use() && unit.is_stand(),
+            Self::Tie => unit.arm_can_use() && unit.is_stand(),
             Self::Skip => true,
         }
     }
@@ -82,6 +92,7 @@ impl SkillData {
 
         match self {
             Self::Melee => ids_fmt(unit.scan_touch_stand_enemy(1)),
+            Self::Tie => ids_fmt(unit.scan_touch_weak_or_fall_enemy(0)),
             Self::Skip => to_self(),
         }
     }
@@ -89,6 +100,7 @@ impl SkillData {
     fn exe(&self, mut unit : UnitMut, target : Target) {
         match self {
             Self::Melee => unit.combat_touch(target.assert_unit()),
+            Self::Tie => unit.tie(target.assert_unit()),
             Self::Skip => (),
         }
     }
