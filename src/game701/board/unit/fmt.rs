@@ -7,18 +7,27 @@ use super::Unit;
 impl<'a> Unit<'a> {
     pub fn show(&self) {
         // active state
-        if self.is_active() {
-            print!("|");
-        } else {
-            print!(" ");
+        let dft = || {
+            if self.is_active() {
+                print!("|");
+            } else {
+                print!(" ");
+            }
+        };
+
+        if let Some(id) = self.board.id_now {
+            if id == self.id {
+                print!(">");
+            }else{
+                dft();
+            }
+        }else{
+            dft();
         }
         
+        
         // name
-        let name_color = match self.team() {
-            Team::Ally => Color::Blue,
-            Team::Enemy => Color::Red,
-        };
-        print!("{}", self.name().color(name_color));
+        print!("{}", self.colored_name());
 
         // hp bar
         print!("{}", hp_bar::<20, 50>(self.hp(), self.max_hp()));

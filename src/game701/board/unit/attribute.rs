@@ -1,3 +1,5 @@
+use colorful::{Color, Colorful};
+
 use crate::game701::{common::{Id, Pos}, skill::Skill};
 
 use super::{Pose, Team, Unit};
@@ -16,6 +18,14 @@ impl<'a> Unit<'a> {
             name += self.board.name_adder[self.id];
         }
         name
+    }
+
+    pub fn colored_name(&self) -> String {
+        let name_color = match self.team() {
+            Team::Ally => Color::Blue,
+            Team::Enemy => Color::Red,
+        };
+        format!("{}", self.name().color(name_color))
     }
 
     pub fn id(&self) -> Id {

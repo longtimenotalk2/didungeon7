@@ -64,8 +64,15 @@ impl Board{
                 self.unit_mut(id)
             };
         }
+
+        // show board and title
+        self.id_now = Some(id);
         self.show();
+        println!();
+        println!("{} 的回合：", unit!().colored_name());
+
         // skill_options
+        println!();
         let mut skill_options = vec![];
         let mut skills = vec![];
         for skill in unit!().skills() {

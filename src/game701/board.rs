@@ -24,6 +24,7 @@ pub struct Board {
     name_manager : HashMap<String, i32>,
     name_adder : Vec<&'static str>,
     rng : ChaChaRng,
+    id_now : Option<Id>,
 }
 
 impl Board {
@@ -36,6 +37,7 @@ impl Board {
             name_manager : HashMap::new(),
             name_adder : Vec::new(),
             rng : ChaChaRng::seed_from_u64(seed),
+            id_now : None,
         }
     }
 
