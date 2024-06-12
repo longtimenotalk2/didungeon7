@@ -71,8 +71,6 @@ impl Board{
         for skill in unit!().skills() {
             if skill.can_use(unit!()) {
                 let targets = skill.find_targets(unit!());
-                dbg!(&skill);
-                dbg!(&targets);
                 if targets.len() > 0 {
                     skill_options.push(skill.name().to_string());
                     skills.push(skill);

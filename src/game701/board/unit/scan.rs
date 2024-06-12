@@ -46,9 +46,10 @@ impl<'a> Unit<'a> {
         let team = self.team();
         let pos_self = self.pos();
         let mut block_acc = 0;
-        let mut c = |end : i32| {
-            for pos in pos_self..=end {
-                if pos != pos_self {
+        let mut c = |dist : i32, is_right : bool| {
+            for d in 0..=dist {
+                if d != 0 {
+                    let pos = if is_right {pos_self + d} else {pos_self - d};
                     let id_tar = self.board.get_id_from_pos(pos);
                     let tar = self.board.unit(id_tar);
                     pos_scan.insert(id_tar, Scan {
@@ -63,8 +64,8 @@ impl<'a> Unit<'a> {
                 }
             }
         };
-        c(0);
-        c((self.board.len() - 1) as Pos);
+        c(pos_self, false);
+        c((self.board.len() - 1) as Pos - pos_self - 1, true);
         
         pos_scan
     }
