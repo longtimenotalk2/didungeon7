@@ -19,7 +19,7 @@ pub enum Team {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum Pose {
+pub enum Pose {
     Alert,
     Left,
     Right,

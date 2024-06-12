@@ -25,6 +25,7 @@ impl<'a> Unit<'a> {
     pub fn scan_touch_weak_or_fall_enemy(&self, bypass : i32) -> Vec<Id> {
         let mut targets = vec![];
         let team = self.team();
+        dbg!(self.scan());
         for (id_tar, scan) in self.scan() {
             let tar = self.board.unit(id_tar);
             if 
@@ -62,8 +63,8 @@ impl<'a> Unit<'a> {
         let mut pos_scan : HashMap<Id, Scan> = HashMap::new();
         let team = self.team();
         let pos_self = self.pos();
-        let mut block_acc = 0;
         let mut c = |dist : i32, is_right : bool| {
+            let mut block_acc = 0;
             for d in 0..=dist {
                 if d != 0 {
                     let pos = if is_right {pos_self + d} else {pos_self - d};
@@ -82,7 +83,7 @@ impl<'a> Unit<'a> {
             }
         };
         c(pos_self, false);
-        c((self.board.len() - 1) as Pos - pos_self - 1, true);
+        c((self.board.len() - 1) as Pos - pos_self, true);
         
         pos_scan
     }

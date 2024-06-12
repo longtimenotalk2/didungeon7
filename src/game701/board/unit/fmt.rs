@@ -1,13 +1,13 @@
 use colorful::{Color, Colorful};
 
-use crate::game701::board::unit::Team;
+use crate::game701::board::unit::{Pose, Team};
 
 use super::Unit;
 
 impl<'a> Unit<'a> {
     pub fn show(&self) {
-        // active state
 
+        // active state
         match self.board.id_now {
             Some(id) if id == self.id => {
                 print!(">");
@@ -20,9 +20,21 @@ impl<'a> Unit<'a> {
                 }
             },
         }
+
+        // pose
+        print!("{}", match self.pose() {
+            Pose::Alert => "!",
+            Pose::Left => "↑",
+            Pose::Right => "↓",
+            Pose::Confuse => "?",
+            Pose::Fall => "_",
+        });
         
         // name
         print!("{}", self.colored_name());
+
+        // Id
+        print!("<{}>", self.id());
 
         // rope
         if self.bound_upper() > 0 {

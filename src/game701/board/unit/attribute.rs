@@ -82,6 +82,10 @@ impl<'a> Unit<'a> {
         self.unit_data().is_active
     }
 
+    pub fn pose(&self) -> Pose {
+        self.unit_data().pose
+    }
+
     pub fn is_stand(&self) -> bool {
         self.unit_data().pose != Pose::Fall
     }
