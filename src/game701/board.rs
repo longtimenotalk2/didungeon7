@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
+use miniserde::{Deserialize, Serialize};
 use rand::SeedableRng;
 use rand_chacha::ChaChaRng;
 use unit::{Unit, UnitData, UnitMut};
 
-use super::common::{Id, Pos};
+use super::{common::{Id, Pos}, dice::Dice};
 
 pub mod unit;
 pub mod new;
@@ -13,6 +14,7 @@ mod operate;
 mod fmt;
 mod round;
 
+#[derive(Serialize, Deserialize)]
 pub struct Board {
     // basic
     units : Vec<UnitData>,
@@ -22,8 +24,8 @@ pub struct Board {
     spd_fixs : Vec<i32>,
     // other
     name_manager : HashMap<String, i32>,
-    name_adder : Vec<&'static str>,
-    rng : ChaChaRng,
+    name_adder : Vec<String>,
+    dice : Dice,
     id_now : Option<Id>,
 }
 
@@ -36,7 +38,7 @@ impl Board {
             spd_fixs : Vec::new(),
             name_manager : HashMap::new(),
             name_adder : Vec::new(),
-            rng : ChaChaRng::seed_from_u64(seed),
+            dice : Dice::new(seed),
             id_now : None,
         }
     }
@@ -54,7 +56,7 @@ impl Board {
             // transform integer to letter ABCDE...
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".get(i..i+1).unwrap()
           }
-        self.name_adder.push(usize2letter(counter as usize));
+        self.name_adder.push(usize2letter(counter as usize).to_string());
 
     }
 
@@ -68,6 +70,10 @@ impl Board {
 
     pub fn unit_mut(&mut self, id: Id) -> UnitMut {
         UnitMut::create(self, id)
+    }
+
+    pub fn rng(&mut self) -> ChaChaRng {
+        self.dice.gen()
     }
 
     fn unit_data(&self, id : Id) -> &UnitData {

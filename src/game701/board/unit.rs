@@ -1,3 +1,4 @@
+use miniserde::{Deserialize, Serialize};
 use rand::Rng;
 
 use super::super::common::Id;
@@ -12,13 +13,13 @@ mod enemys;
 mod action;
 mod scan;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Team {
     Ally,
     Enemy,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Pose {
     Alert,
     Left,
@@ -27,6 +28,7 @@ pub enum Pose {
     Fall,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct UnitData {
     name : String,
     team : Team,
@@ -91,6 +93,6 @@ impl<'a> UnitMut<'a> {
     }
 
     pub fn d100(&mut self) -> i32 {
-        self.board.rng.gen_range(1..=100)
+        self.board.rng().gen_range(1..=100)
     }
 }

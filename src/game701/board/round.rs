@@ -5,6 +5,7 @@ use crate::game701::{common::Id, skill::Target};
 use super::Board;
 
 pub mod io;
+mod file;
 
 impl Board{
     pub fn play(&mut self) {
@@ -24,12 +25,16 @@ impl Board{
             self.unit_mut(id).refresh_active()
         }
         // random change spd
+        let mut rng = self.rng();
         for f in self.spd_fixs.iter_mut() {
-            *f = self.rng.gen_range(-4..=4);
+            *f = rng.gen_range(-4..=4);
         }
     }
 
     pub fn round_main(&mut self) -> bool {
+        // auto save
+        self.save_default();
+        
         // find id with active and most order_point
         let mut pool = vec![];
         for id in 0..self.len() {

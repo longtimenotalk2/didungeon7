@@ -1,6 +1,13 @@
 use super::{unit::UnitData, Board};
 
 impl Board {
+    pub fn start() -> Self {
+        match Self::load_default() {
+            Ok(board) => board,
+            Err(_) => Self::new_team(),
+        }
+    }
+
     pub fn new_team() -> Self {
         let mut board = Board::new(114514);
         board.add_unit(UnitData::new_noal());

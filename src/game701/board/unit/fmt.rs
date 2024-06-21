@@ -1,6 +1,6 @@
 use colorful::{Color, Colorful};
 
-use crate::game701::board::unit::{Pose, Team};
+use crate::game701::{board::unit::{Pose, Team}, common::DEBUG_GLOBAL};
 
 use super::Unit;
 
@@ -34,7 +34,10 @@ impl<'a> Unit<'a> {
         print!("{}", self.colored_name());
 
         // Id
-        print!("<{}>", self.id());
+        if DEBUG_GLOBAL {
+            print!("<{}>", self.id());
+        }
+        
 
         // rope
         if self.bound_upper() > 0 {

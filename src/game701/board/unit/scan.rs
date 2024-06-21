@@ -25,7 +25,6 @@ impl<'a> Unit<'a> {
     pub fn scan_touch_weak_or_fall_enemy(&self, bypass : i32) -> Vec<Id> {
         let mut targets = vec![];
         let team = self.team();
-        dbg!(self.scan());
         for (id_tar, scan) in self.scan() {
             let tar = self.board.unit(id_tar);
             if 
@@ -49,7 +48,6 @@ mod test {
     fn test_scan_touch_stand_enemy() {
         let board = Board::new_team();
         let unit = board.unit(0);
-        dbg!(unit.scan_touch_stand_enemy(1));
     }
 }
 
@@ -91,12 +89,11 @@ impl<'a> Unit<'a> {
 
 #[cfg(test)]
 mod test_scan {
-    use crate::game701::board::Board;
+    use crate::game701::{board::Board, common::DEBUG_GLOBAL};
 
     #[test]
     fn test_scan() {
         let board = Board::new_team();
         let unit = board.unit(0);
-        dbg!(unit.scan());
     }
 }

@@ -15,7 +15,7 @@ impl<'a> Unit<'a> {
         if *self.board.name_manager.get(&name).unwrap() == 0 {
             name += " ";
         } else {
-            name += self.board.name_adder[self.id];
+            name += &self.board.name_adder[self.id];
         }
         name
     }
