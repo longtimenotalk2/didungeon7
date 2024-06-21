@@ -1,9 +1,11 @@
+use miniserde::{Deserialize, Serialize};
+
 use super::{board::{unit::{Unit, UnitMut}, Board}, common::Id};
 
 mod combat;
 mod rope;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Skill {
     Melee,
     Tie,
@@ -99,7 +101,7 @@ impl SkillData {
 
     fn exe(&self, mut unit : UnitMut, target : Target) {
         match self {
-            Self::Melee => unit.combat_touch(target.assert_unit()),
+            Self::Melee => unit.combat_touch(target.assert_unit(), 85, 10),
             Self::Tie => unit.tie(target.assert_unit()),
             Self::Skip => (),
         }

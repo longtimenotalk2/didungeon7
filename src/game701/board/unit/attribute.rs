@@ -57,6 +57,22 @@ impl<'a> Unit<'a> {
         self.unit_data().basic_melee_def
     }
 
+    pub fn acc(&self) -> i32 {
+        self.unit_data().basic_evd
+    }
+
+    pub fn evd(&self) -> i32 {
+        self.unit_data().basic_evd
+    }
+
+    pub fn cri(&self) -> i32 {
+        self.unit_data().basic_cri
+    }
+
+    pub fn lck(&self) -> i32 {
+        self.unit_data().basic_lck
+    }
+
     pub fn spd_original(&self) -> i32 {
         self.unit_data().basic_spd
     }

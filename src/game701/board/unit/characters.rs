@@ -8,6 +8,10 @@ impl UnitData {
             32, // max_hp,
             8, // basic_melee_atk
             9, // basic_melee_def
+            10, // basic_acc
+            12, // basic_evd
+            7, // basic_cri
+            13,  // basic_lck
             10, // basic_spd
             5, // rope_tie
             2, // rope_struggle
@@ -22,6 +26,10 @@ impl UnitData {
             50, // max_hp,
             13, // basic_melee_atk
             13, // basic_melee_def
+            13, // basic_acc
+            12, // basic_evd
+            13, // basic_cri
+            5,  // basic_lck
             11, // basic_spd
             3, // rope_tie
             1, // rope_struggle
@@ -36,6 +44,10 @@ impl UnitData {
             38, // max_hp,
             9, // basic_melee_atk
             9, // basic_melee_def
+            11, // basic_acc
+            17, // basic_evd
+            13, // basic_cri
+            12,  // basic_lck
             16, // basic_spd
             4, // rope_tie
             2, // rope_struggle
@@ -50,6 +62,10 @@ impl UnitData {
             42, // max_hp,
             10, // basic_melee_atk
             11, // basic_melee_def
+            16, // basic_acc
+            12, // basic_evd
+            13, // basic_cri
+            11,  // basic_lck
             13, // basic_spd
             4, // rope_tie
             2, // rope_struggle
