@@ -13,10 +13,10 @@ mod fmt;
 mod characters;
 mod enemys;
 mod action;
-mod scan;
+pub mod scan;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-enum Team {
+pub enum Team {
     Ally,
     Enemy,
 }

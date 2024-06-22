@@ -52,6 +52,9 @@ impl<'a> UnitMut<'a> {
             if let Some(d) = dir_atk {
                 tar_mut!().be_pinned_from(d);
             }
+            if tar!().is_hp_empty() {
+                tar_mut!().fall_down();
+            }
             println!("{} 对 {} 造成 【 {} 】 点伤害{}    ({})" , self.immute_core().colored_name(), tar!().colored_name(), 
                 dmg.to_string().color(Color::Yellow), 
                 match is_crit {

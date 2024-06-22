@@ -1,5 +1,7 @@
 use miniserde::{Deserialize, Serialize};
 
+use crate::game701::board::unit::scan::TargetDemandCard;
+
 use super::{board::{unit::{Unit, UnitMut}, Board}, common::Id};
 
 mod combat;
@@ -9,6 +11,8 @@ mod rope;
 pub enum Skill {
     Melee,
     Tie,
+    Struggle,
+    Rescue,
     Skip,
 }
 
@@ -16,7 +20,9 @@ impl Skill {
     pub fn name(&self) -> &'static str {
         match self {
             Self::Melee => "体术",
-            Self::Tie => "束缚",
+            Self::Tie => "捆绑",
+            Self::Struggle => "挣扎",
+            Self::Rescue => "解绑",
             Self::Skip => "略过",
         }
     }
@@ -25,6 +31,8 @@ impl Skill {
         vec![
             Self::Melee, 
             Self::Tie,
+            Self::Struggle,
+            Self::Rescue,
             Self::Skip,
         ]
     }
@@ -33,6 +41,8 @@ impl Skill {
         match self {
             Self::Melee => SkillData::Melee,
             Self::Tie => SkillData::Tie,
+            Self::Struggle => SkillData::Struggle,
+            Self::Rescue => SkillData::Rescue,
             Self::Skip => SkillData::Skip,
         }
     }
@@ -53,6 +63,8 @@ impl Skill {
 enum SkillData {
     Melee,
     Tie,
+    Struggle,
+    Rescue,
     Skip,
 }
 
@@ -62,6 +74,10 @@ pub enum Target {
 }
 
 impl Target {
+    pub fn new_unit(id : Id) -> Self {
+        Self::Unit(id)
+    }
+
     pub fn name_in_board(&self, board : &Board) -> String {
         match self {
             Self::Unit(id) => board.unit(*id).name().to_string(),
@@ -81,6 +97,8 @@ impl SkillData {
         match self {
             Self::Melee => unit.arm_can_use() && unit.is_stand(),
             Self::Tie => unit.arm_can_use() && unit.is_stand(),
+            Self::Struggle => unit.has_bound(),
+            Self::Rescue => unit.arm_can_use() && unit.is_stand(),
             Self::Skip => true,
         }
     }
@@ -90,11 +108,13 @@ impl SkillData {
             l.iter().map(|id| Target::Unit(*id)).collect()
         }
 
-        let to_self = || {vec![Target::Unit(unit.id())]};
+        let to_self = || {vec![Target::new_unit(unit.id())]};
 
         match self {
-            Self::Melee => ids_fmt(unit.scan_touch_stand_enemy(1)),
-            Self::Tie => ids_fmt(unit.scan_touch_weak_or_fall_enemy(0)),
+            Self::Melee => ids_fmt(unit.scan_main(TargetDemandCard::new_enemy().only_stand().set_bypass(1))),
+            Self::Tie => ids_fmt(unit.scan_main(TargetDemandCard::new_enemy().only_weak().or_fall())),
+            Self::Struggle => to_self(),
+            Self::Rescue => ids_fmt(unit.scan_main(TargetDemandCard::new_ally().only_bound())),
             Self::Skip => to_self(),
         }
     }
@@ -103,6 +123,8 @@ impl SkillData {
         match self {
             Self::Melee => unit.combat_touch(target.assert_unit(), 85, 10),
             Self::Tie => unit.tie(target.assert_unit()),
+            Self::Struggle => unit.struggle(),
+            Self::Rescue => unit.rescue(target.assert_unit()),
             Self::Skip => (),
         }
     }

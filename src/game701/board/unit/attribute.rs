@@ -1,6 +1,6 @@
 use colorful::{Color, Colorful};
 
-use crate::game701::{common::{Dir, Id, Pos}, skill::Skill};
+use crate::game701::{board::OrderValue, common::{Dir, Id, Pos}, skill::Skill};
 
 use super::{Pose, Team, Unit};
 
@@ -49,44 +49,85 @@ impl<'a> Unit<'a> {
         self.unit_data().hp
     }
 
+    pub fn is_hp_empty(&self) -> bool {
+        self.hp() <= 0
+    }
+
     pub fn melee_atk(&self) -> i32 {
-        self.unit_data().basic_melee_atk
+        let mut v = self.unit_data().basic_melee_atk as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn melee_def(&self) -> i32 {
-        self.unit_data().basic_melee_def
+        let mut v = self.unit_data().basic_melee_def as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn acc(&self) -> i32 {
-        self.unit_data().basic_evd
+        let mut v = self.unit_data().basic_evd as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn evd(&self) -> i32 {
-        self.unit_data().basic_evd
+        let mut v = self.unit_data().basic_evd as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn cri(&self) -> i32 {
-        self.unit_data().basic_cri
+        let mut v = self.unit_data().basic_cri as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn lck(&self) -> i32 {
-        self.unit_data().basic_lck
-    }
-
-    pub fn spd_original(&self) -> i32 {
-        self.unit_data().basic_spd
+        let mut v = self.unit_data().basic_lck as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
     }
 
     pub fn spd(&self) -> i32 {
-        self.spd_original() + self.board.spd_fixs[self.id]
+        let mut v = self.unit_data().basic_spd as f64;
+        if self.is_weak() {
+            v *= 0.8;
+        }
+        v.ceil() as i32
+    }
+
+    pub(in super::super) fn order_value(&self) -> OrderValue {
+        OrderValue::new(
+            self.id(), 
+            self.spd(), 
+            self.board.spd_fixs[self.id()], 
+            self.is_stand(),
+        )
     }
 
     pub fn rope_tie(&self) -> i32 {
         self.unit_data().rope_tie
     }
 
-    pub fn order_point(&self) -> i32 {
-        self.spd() * 10 + self.id as i32
+    pub fn rope_struggle(&self) -> i32 {
+        self.unit_data().rope_struggle
+    }
+
+    pub fn rope_rescue(&self) -> i32 {
+        self.unit_data().rope_rescue
     }
 
     pub fn skills(&self) -> Vec<Skill> {
@@ -114,15 +155,27 @@ impl<'a> Unit<'a> {
         self.unit_data().bound_lower
     }
 
-    pub fn arm_can_use(&self) -> bool {
-        self.unit_data().bound_upper == 0
+    pub fn has_bound(&self) -> bool {
+        self.unit_data().bound_upper!= 0 || self.unit_data().bound_lower!= 0
     }
 
     pub fn is_weak(&self) -> bool {
         self.hp() as f64 / self.max_hp() as f64 <= 0.2
     }
 
-    // interaction
+    // cans
+    pub fn arm_can_use(&self) -> bool {
+        self.unit_data().bound_upper == 0
+    }
+
+    pub fn leg_can_use(&self) -> bool {
+        self.unit_data().bound_lower == 0
+    }
+
+    pub fn can_stand(&self) -> bool {
+        self.arm_can_use() | self.leg_can_use()
+    }
+
     pub fn can_block(&self) -> bool {
         self.is_stand()
     }

@@ -1,9 +1,20 @@
+use std::io;
+
 use super::{unit::UnitData, Board};
 
 impl Board {
     pub fn start() -> Self {
         match Self::load_default() {
-            Ok(board) => board,
+            Ok(board) => {
+                println!("按回车读档，输入任意字符重开");
+                let mut ops = String::new();
+                io::stdin().read_line(&mut ops).expect("failed to read line");
+                if ops.trim() == "" {
+                    board
+                } else {
+                    Self::new_team()
+                }
+            },
             Err(_) => Self::new_team(),
         }
     }

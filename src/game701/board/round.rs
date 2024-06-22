@@ -40,7 +40,7 @@ impl Board{
         for id in 0..self.len() {
             let unit = self.unit(id);
             if unit.is_active() {
-                pool.push((id, unit.order_point()));
+                pool.push((id, unit.order_value()));
             }
         }
         if pool.is_empty() {
@@ -69,6 +69,12 @@ impl Board{
                 self.unit_mut(id)
             };
         }
+
+        // auto heal
+        unit_mut!().auto_heal();
+
+        // try stand
+        unit_mut!().try_stand_and_alert();
 
         // show board and title
         self.id_now = Some(id);

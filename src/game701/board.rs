@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{cmp::Ordering, collections::HashMap};
 
 use miniserde::{Deserialize, Serialize};
 use rand::SeedableRng;
@@ -104,4 +104,58 @@ impl Board {
         p < self.len() 
     }
 
+}
+
+
+#[derive(PartialEq, Eq, Debug)]
+struct OrderValue {
+    id : Id,
+    spd : i32,
+    spd_fix : i32,
+    is_stand : bool,
+}
+
+impl OrderValue {
+    fn new(id : Id, spd : i32, spd_fix : i32, is_stand : bool) -> Self {
+        Self {
+            id,
+            spd,
+            spd_fix,
+            is_stand,
+        }
+    }
+    
+    fn spd_fixed(&self) -> i32 {
+        self.spd + self.spd_fix
+    }
+}
+
+impl PartialOrd for OrderValue {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for OrderValue {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // 考虑站立与否
+        let order = self.is_stand.cmp(&other.is_stand);
+        if Ordering::Equal != order {
+            return order;
+        }
+
+        // 考虑修正速度
+        let order = self.spd_fixed().cmp(&other.spd_fix);
+        if Ordering::Equal != order {
+            return order;
+        }
+
+        // 考虑id（小id优先）
+        let order = other.id.cmp(&self.id);
+        if Ordering::Equal != order {
+            return order;
+        }
+
+        Ordering::Equal
+    }
 }
