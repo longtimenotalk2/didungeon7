@@ -192,6 +192,7 @@ impl<'a> Unit<'a> {
     }
 
     pub fn can_pin_with_dir(&self, dir : Dir) -> bool {
+        if !self.arm_can_use() {return false;}
         match self.unit_data().pose {
             Pose::Alert => true,
             Pose::Left => dir == Dir::Left,
@@ -199,6 +200,20 @@ impl<'a> Unit<'a> {
             Pose::Confuse => false,
             Pose::Fall => false,
         }
+    }
+
+    pub fn is_pinned_with_dir(&self, dir : Dir) -> bool {
+        let pos_pinner = dir.next_pos(self.pos());
+        if self.board.pos_is_valid(pos_pinner) {
+            let pinner = self.board.unit(self.board.get_id_from_pos(pos_pinner));
+            if 
+                pinner.team() != self.team() &&
+                pinner.can_pin_with_dir(dir.anti())
+            {
+                return true;
+            }
+        }
+        false
     }
 
     pub fn is_sandwich_from(&self, dir_atk : Dir) -> bool {

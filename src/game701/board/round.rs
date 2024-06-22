@@ -20,9 +20,14 @@ impl Board{
     fn round_next(&mut self) {
         self.round += 1;
         println!("================第 {} 轮================", self.round);
-        // active everyone
+        
         for id in 0..self.len() {
-            self.unit_mut(id).refresh_active()
+            // active everyone
+            self.unit_mut(id).refresh_active();
+            // auto heal
+            self.unit_mut(id).auto_heal();
+            // auto stand
+            self.unit_mut(id).try_stand_and_alert();
         }
         // random change spd
         let mut rng = self.rng();
@@ -69,9 +74,6 @@ impl Board{
                 self.unit_mut(id)
             };
         }
-
-        // auto heal
-        unit_mut!().auto_heal();
 
         // try stand
         unit_mut!().try_stand_and_alert();

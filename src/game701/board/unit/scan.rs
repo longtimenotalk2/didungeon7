@@ -1,6 +1,6 @@
 use std::{collections::HashMap, default};
 
-use crate::game701::common::{Id, Pos};
+use crate::game701::common::{Dir, Id, Pos};
 
 use super::Unit;
 
@@ -84,12 +84,22 @@ impl<'a> Unit<'a> {
                 false => true,
             };
 
+            let dist_valid = if !self.is_stand() || !self.leg_can_use() {
+                scan.dist <= 1
+            } else {
+                true
+            };
+
+            let obscured_valid = !scan.obscured;
+
             if 
                 is_enemy_valid
                 && (only_weak_valid || or_fall_valid)
                 && only_stand_valid
                 && only_bound_valid
                 && bypass_valid
+                && dist_valid
+                && obscured_valid
             {
                 targets.push(id_tar);
             }
@@ -114,6 +124,7 @@ mod test {
 struct Scan {
     block_num : i32,
     dist : i32,
+    obscured : bool,
 }
 
 impl<'a> Unit<'a> {
@@ -123,6 +134,7 @@ impl<'a> Unit<'a> {
         let pos_self = self.pos();
         let mut c = |dist : i32, is_right : bool| {
             let mut block_acc = 0;
+            let mut obscured = false;
             for d in 0..=dist {
                 if d != 0 {
                     let pos = if is_right {pos_self + d} else {pos_self - d};
@@ -131,12 +143,21 @@ impl<'a> Unit<'a> {
                     pos_scan.insert(id_tar, Scan {
                         block_num : block_acc,
                         dist : d,
+                        obscured,
                     });
                     if 
                         tar.team() != team
                         && tar.can_block()
                     {
                         block_acc += 1;
+                    }
+                    if 
+                        self.is_pinned_with_dir(match is_right {
+                            true => Dir::Right,
+                            false => Dir::Left,
+                        })
+                    {
+                        obscured = true;
                     }
                 }
             }

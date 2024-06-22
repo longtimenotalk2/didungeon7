@@ -3,15 +3,20 @@ use colorful::{Color, Colorful};
 use crate::game701::{board::unit::UnitMut, common::{Dir, Id}};
 
 impl<'a> UnitMut<'a> {
-    pub fn combat_touch(&mut self, id : Id, acc_skill : i32, cri_skill : i32) {
+    pub fn combat_touch(&mut self, 
+        id : Id, 
+        rate : f64,
+        acc_skill : i32, 
+        cri_skill : i32
+    ) {
         let dir_atk = self.dash_to_unit(id);
         if let Some(d) = dir_atk {
             self.set_dir(d);
         }
-        self.cause_dmg(id, dir_atk, acc_skill, cri_skill);
+        self.cause_dmg(id, dir_atk, rate, acc_skill, cri_skill);
     }
 
-    fn cause_dmg(&mut self, id : Id, dir_atk : Option<Dir>, acc_skill : i32, cri_skill : i32) {
+    fn cause_dmg(&mut self, id : Id, dir_atk : Option<Dir>, rate : f64, acc_skill : i32, cri_skill : i32) {
         macro_rules! tar {
             () => {
                 self.other(id)
@@ -30,13 +35,14 @@ impl<'a> UnitMut<'a> {
         let lck = tar!().lck();
         let is_backstab = dir_atk.is_some_and(|d| tar!().is_backstab_from(d));
         let is_sandwich = dir_atk.is_some_and(|d| tar!().is_sandwich_from(d));
+        let is_arm_cant_use = !tar!().arm_can_use();
 
         let hit = hit_rate(acc, evd, acc_skill, is_backstab, is_sandwich);
         let is_hit = hit >= self.d100();
-        let crit = cri_rate(cri, lck, cri_skill, is_backstab, is_sandwich);
+        let crit = cri_rate(cri, lck, cri_skill, is_backstab, is_sandwich, is_arm_cant_use);
         let is_crit = crit >= self.d100();
 
-        let base_dmg = dmg_basic(atk, def, is_backstab, is_sandwich);
+        let base_dmg = dmg_basic(atk, def, is_backstab, is_sandwich, is_arm_cant_use) * rate;
         let dmg = match is_crit {
             true => (base_dmg * (150 + self.d100()) as f64 / 50 as f64) as i32,
             false => (base_dmg * (100 + self.d100()) as f64 / 100 as f64) as i32,
@@ -73,10 +79,11 @@ impl<'a> UnitMut<'a> {
     }
 }
 
-fn cri_rate(cri : i32, lck : i32, basic_cri : i32, is_backtrab : bool, is_sandwich : bool) -> i32 {
+fn cri_rate(cri : i32, lck : i32, basic_cri : i32, is_backtrab : bool, is_sandwich : bool, is_arm_cant_use : bool) -> i32 {
     let mut crit = basic_cri;
     if is_backtrab {crit += 20};
     if is_sandwich {crit += 20};
+    if is_arm_cant_use {crit += 20};
     (crit + (cri - lck)).min(100).max(0)
 }
 
@@ -87,11 +94,12 @@ fn hit_rate(acc : i32, evd : i32, acc_skill : i32, is_backtrab : bool, is_sandwi
     (acc_sum + 2 * (acc - evd)).min(95).max(5)
 }
 
-fn dmg_basic(atk : i32, def : i32, is_backtrab : bool, is_sandwich : bool) -> f64 {
+fn dmg_basic(atk : i32, def : i32, is_backtrab : bool, is_sandwich : bool, is_arm_cant_use : bool) -> f64 {
     let mut atk = atk as f64;
     let mut def = def as f64;
     if is_backtrab {atk *= 1.2; def *= 0.8};
     if is_sandwich {atk *= 1.2; def *= 0.8};
+    if is_arm_cant_use {atk *= 1.2; def *= 0.8};
     let dmg = atk * ((100. - def) / 100.);
     dmg
 }

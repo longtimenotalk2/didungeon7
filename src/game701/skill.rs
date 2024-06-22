@@ -10,6 +10,7 @@ mod rope;
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Skill {
     Melee,
+    Kick,
     Tie,
     Struggle,
     Rescue,
@@ -20,6 +21,7 @@ impl Skill {
     pub fn name(&self) -> &'static str {
         match self {
             Self::Melee => "体术",
+            Self::Kick => "踢击",
             Self::Tie => "捆绑",
             Self::Struggle => "挣扎",
             Self::Rescue => "解绑",
@@ -30,6 +32,7 @@ impl Skill {
     pub fn basic_set() -> Vec<Self> {
         vec![
             Self::Melee, 
+            Self::Kick,
             Self::Tie,
             Self::Struggle,
             Self::Rescue,
@@ -39,7 +42,18 @@ impl Skill {
 
     fn link(&self) -> SkillData {
         match self {
-            Self::Melee => SkillData::Melee,
+            Self::Melee => SkillData::Melee {
+                rate : 1.,  
+                acc : 85,
+                cri : 10, 
+                leg_only : false
+            },
+            Self::Kick => SkillData::Melee {
+                rate : 0.8, 
+                acc : 60,
+                cri : -20, 
+                leg_only : true
+            },
             Self::Tie => SkillData::Tie,
             Self::Struggle => SkillData::Struggle,
             Self::Rescue => SkillData::Rescue,
@@ -61,7 +75,7 @@ impl Skill {
 }
 
 enum SkillData {
-    Melee,
+    Melee {rate : f64, acc : i32, cri : i32, leg_only : bool},
     Tie,
     Struggle,
     Rescue,
@@ -95,7 +109,10 @@ impl Target {
 impl SkillData {
     fn can_use(&self, unit : Unit) -> bool {
         match self {
-            Self::Melee => unit.arm_can_use() && unit.is_stand(),
+            Self::Melee {
+                leg_only,
+                ..
+            } => (*leg_only || unit.arm_can_use()) && unit.is_stand(),
             Self::Tie => unit.arm_can_use() && unit.is_stand(),
             Self::Struggle => unit.has_bound(),
             Self::Rescue => unit.arm_can_use() && unit.is_stand(),
@@ -111,7 +128,9 @@ impl SkillData {
         let to_self = || {vec![Target::new_unit(unit.id())]};
 
         match self {
-            Self::Melee => ids_fmt(unit.scan_main(TargetDemandCard::new_enemy().only_stand().set_bypass(1))),
+            Self::Melee {
+                ..
+            } => ids_fmt(unit.scan_main(TargetDemandCard::new_enemy().only_stand().set_bypass(1))),
             Self::Tie => ids_fmt(unit.scan_main(TargetDemandCard::new_enemy().only_weak().or_fall())),
             Self::Struggle => to_self(),
             Self::Rescue => ids_fmt(unit.scan_main(TargetDemandCard::new_ally().only_bound())),
@@ -121,7 +140,16 @@ impl SkillData {
 
     fn exe(&self, mut unit : UnitMut, target : Target) {
         match self {
-            Self::Melee => unit.combat_touch(target.assert_unit(), 85, 10),
+            Self::Melee {
+                rate,
+                acc, 
+                cri,
+                ..
+            } => unit.combat_touch(target.assert_unit(), 
+                *rate,
+                *acc, 
+                *cri
+            ),
             Self::Tie => unit.tie(target.assert_unit()),
             Self::Struggle => unit.struggle(),
             Self::Rescue => unit.rescue(target.assert_unit()),

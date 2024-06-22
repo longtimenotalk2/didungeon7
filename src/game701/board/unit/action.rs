@@ -169,6 +169,8 @@ impl<'a> UnitMut<'a> {
             Pose::Alert => {unit_mut!().pose = Pose::from_dir(dir_atk.anti());},
             Pose::Left | Pose::Right => if unit!().is_backstab_from(dir_atk) && unit!().is_sandwich_from(dir_atk) {
                 unit_mut!().pose = Pose::Confuse;
+            } else {
+                unit_mut!().pose = Pose::from_dir(dir_atk.anti());
             },
             _ => (),
         }
