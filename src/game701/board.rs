@@ -98,4 +98,10 @@ impl Board {
         self.ids_by_position[p]
     }
 
+    fn pos_is_valid(&self, pos: Pos) -> bool {
+        if pos < 0 {return false;}
+        let p : usize = pos.try_into().unwrap();
+        p < self.len() 
+    }
+
 }

@@ -1,6 +1,8 @@
 use miniserde::{Deserialize, Serialize};
 use rand::Rng;
 
+use crate::game701::common::Dir;
+
 use super::super::common::Id;
 
 use super::Board;
@@ -14,18 +16,27 @@ mod action;
 mod scan;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-pub enum Team {
+enum Team {
     Ally,
     Enemy,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-pub enum Pose {
+enum Pose {
     Alert,
     Left,
     Right,
     Confuse,
     Fall,
+}
+
+impl Pose {
+    pub fn from_dir(dir : Dir) -> Pose {
+        match dir {
+            Dir::Left => Pose::Left,
+            Dir::Right => Pose::Right,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]

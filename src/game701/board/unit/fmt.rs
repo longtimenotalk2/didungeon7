@@ -23,7 +23,7 @@ impl<'a> Unit<'a> {
 
         // pose
         print!("{}", match self.pose() {
-            Pose::Alert => "!",
+            Pose::Alert => " ",
             Pose::Left => "↑",
             Pose::Right => "↓",
             Pose::Confuse => "?",

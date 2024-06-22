@@ -1,6 +1,6 @@
 use colorful::{Color, Colorful};
 
-use crate::game701::{common::{Id, Pos}, skill::Skill};
+use crate::game701::{common::{Dir, Id, Pos}, skill::Skill};
 
 use super::{Pose, Team, Unit};
 
@@ -125,5 +125,40 @@ impl<'a> Unit<'a> {
     // interaction
     pub fn can_block(&self) -> bool {
         self.is_stand()
+    }
+
+    // about pose
+    pub fn is_backstab_from(&self, dir_atk : Dir) -> bool {
+        match self.unit_data().pose {
+            Pose::Alert => false,
+            Pose::Left => dir_atk == Dir::Left,
+            Pose::Right => dir_atk == Dir::Right,
+            Pose::Confuse => true,
+            Pose::Fall => false,
+        }
+    }
+
+    pub fn can_pin_with_dir(&self, dir : Dir) -> bool {
+        match self.unit_data().pose {
+            Pose::Alert => true,
+            Pose::Left => dir == Dir::Left,
+            Pose::Right => dir == Dir::Right,
+            Pose::Confuse => false,
+            Pose::Fall => false,
+        }
+    }
+
+    pub fn is_sandwich_from(&self, dir_atk : Dir) -> bool {
+        let pos_pinner = dir_atk.next_pos(self.pos());
+        if self.board.pos_is_valid(pos_pinner) {
+            let pinner = self.board.unit(self.board.get_id_from_pos(pos_pinner));
+            if 
+                pinner.team() != self.team() &&
+                pinner.can_pin_with_dir(dir_atk.anti())
+            {
+                return true;
+            }
+        }
+        false
     }
 }
