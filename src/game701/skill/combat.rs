@@ -38,8 +38,8 @@ impl<'a> UnitMut<'a> {
 
         let base_dmg = dmg_basic(atk, def, is_backstab, is_sandwich);
         let dmg = match is_crit {
-            true => (base_dmg * (150 + self.d100()) as f64 / 100 as f64) as i32,
-            false => (base_dmg * (100 + self.d100()) as f64 / 200 as f64) as i32,
+            true => (base_dmg * (150 + self.d100()) as f64 / 50 as f64) as i32,
+            false => (base_dmg * (100 + self.d100()) as f64 / 100 as f64) as i32,
         };
         let base_info = format!("hit = {}, cri = {}{}{}",
             hit,
@@ -78,10 +78,10 @@ fn cri_rate(cri : i32, lck : i32, basic_cri : i32, is_backtrab : bool, is_sandwi
 }
 
 fn hit_rate(acc : i32, evd : i32, acc_skill : i32, is_backtrab : bool, is_sandwich : bool) -> i32 {
-    let mut acc = acc_skill;
-    if is_backtrab {acc += 20};
-    if is_sandwich {acc += 20};
-    (acc + 2 * (acc - evd)).min(95).max(5)
+    let mut acc_sum = acc_skill;
+    if is_backtrab {acc_sum += 20};
+    if is_sandwich {acc_sum += 20};
+    (acc_sum + 2 * (acc - evd)).min(95).max(5)
 }
 
 fn dmg_basic(atk : i32, def : i32, is_backtrab : bool, is_sandwich : bool) -> f64 {
